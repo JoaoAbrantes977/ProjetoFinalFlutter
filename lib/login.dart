@@ -76,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // VERIFICAR OS INPUTS
   bool _validateInputs() {
     if (_formKey.currentState?.validate() ?? false) {
       return true;
