@@ -177,7 +177,7 @@ class RegisterPageState extends State<RegisterPage> {
                       });
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCountry,
                     decoration: InputDecoration(
@@ -198,7 +198,7 @@ class RegisterPageState extends State<RegisterPage> {
                       });
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
@@ -213,14 +213,13 @@ class RegisterPageState extends State<RegisterPage> {
                       if (value == null || value.isEmpty) {
                         return 'Password is required';
                       }
-                      // You can add password validation logic here if needed
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _register,
-                    child: Text('Register'),
+                    child: const Text('Register'),
                   ),
                 ],
               ),
