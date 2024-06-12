@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'inspection.dart';
 import 'register.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class User {
+  late String _id;
+  late String _email;
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Login Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
-    );
+  User(this._email, this._id);
+
+  String get email => _email;
+
+  set email(String value) {
+    _email = value;
+  }
+
+  String get id => _id;
+
+  set id(String value) {
+    _id = value;
+  }
+
+  static User? _userInstance;
+
+  static User get userInstance {
+    _userInstance ??= User("default_email", "default_id");
+    return _userInstance!;
+  }
+
+  static void setUserInstance(User user) {
+    _userInstance = user;
   }
 }
 
@@ -39,57 +50,67 @@ class _LoginPageState extends State<LoginPage> {
       final password = _passwordController.text;
 
       final url = Uri.parse('http://10.0.2.2:3000/user/login');
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({
-          'email': email,
-          'password': password,
-        }),
-      );
+      try {
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'email': email,
+            'password': password,
+          }),
+        );
 
-      if (response.statusCode == 200) {
-        final responseBody = json.decode(response.body);
-        final token = responseBody['token'];
-        //await _storeToken(token);
+        if (response.statusCode == 200) {
+          final responseBody = json.decode(response.body);
+          final token = responseBody['token'];
+          final userId = responseBody['userId'].toString();
+
+          // Save user id and email
+          User.setUserInstance(User(email, userId));
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("User Signed In Successfully"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => InspectionsPage()),
+          );
+          print('Login successful: $token');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Wrong Email or Password"),
+              backgroundColor: Colors.red,
+            ),
+          );
+          print('Login failed: ${response.body}');
+        }
+      } catch (e) {
+        // Handle network errors, server errors, etc.
+        print('Error logging in: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("User Signed In Successfully"),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>  InspectionsPage()),
-        );
-        print('Login successful: $token');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Wrong Email or Password"),
+            content: Text("Error logging in"),
             backgroundColor: Colors.red,
           ),
         );
-        print('Login failed: ${response.body}');
       }
     }
   }
 
-  // VERIFICAR OS INPUTS
+  // Validate input fields
   bool _validateInputs() {
     if (_formKey.currentState?.validate() ?? false) {
       return true;
     }
     return false;
   }
-/*
-  Future<void> _storeToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('jwt_token', token);
-  }
-*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

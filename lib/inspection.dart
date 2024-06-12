@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:projeto_final_flutter/login.dart';
-
 import 'inspection/create-inspection.dart';
+import 'inspection/details-inspection.dart';
 
 class InspectionsPage extends StatefulWidget {
   @override
@@ -9,39 +11,69 @@ class InspectionsPage extends StatefulWidget {
 }
 
 class InspectionsPageState extends State<InspectionsPage> {
+  // Access the User class
+  User user = User.userInstance;
+  List<dynamic> inspections = []; // List to store inspection data
+
+  @override
+  void initState() {
+    super.initState();
+    fetchInspections(); // Fetch inspections when the widget initializes
+  }
+
+  // Function to fetch inspections
+  Future<void> fetchInspections() async {
+    String userId = user.id;
+    String url = 'http://10.0.2.2:3000/inspection/all/$userId'; // Replace with your API endpoint
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON and update the state
+      List<dynamic> data = json.decode(response.body)['inspections'];
+      setState(() {
+        inspections = data;
+      });
+    } else {
+      // If the server did not return a 200 OK response, throw an error.
+      throw Exception('Failed to load inspections');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String userEmail = user.email;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Inspections'),
+        title: const Text('As minhas Inspeções'),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 30,
                     // Placeholder for user profile picture
                     backgroundImage: AssetImage('assets/user_profile.png'),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'User Name',
+                  const SizedBox(height: 10),
+                  const Text(
+                    'João', // Replace with user name if available
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
                   Text(
-                    'user@example.com',
-                    style: TextStyle(
+                    userEmail, // Display user's email
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
                     ),
@@ -50,23 +82,27 @@ class InspectionsPageState extends State<InspectionsPage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
+              leading: const Icon(Icons.account_circle),
               title: const Text('Profile'),
               onTap: () {
                 // Navigate to profile screen
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               title: const Text('Log out'),
               onTap: () {
+                // Reset user instance upon logout
+                User.setUserInstance(User("default_email", "default_id"));
+
+                // Navigate to login screen
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.info),
               title: const Text('App Version'),
@@ -79,36 +115,50 @@ class InspectionsPageState extends State<InspectionsPage> {
           ],
         ),
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 200,
-                  height: 150,
-                  color: Colors.blue,
-                  child: const Center(child: Text('Box 1')),
+      body: ListView.builder(
+        itemCount: inspections.length,
+        itemBuilder: (BuildContext context, int index) {
+          dynamic inspection = inspections[index];
+          String inspectionName = inspection['tipo']['nome'];
+          String inspectionId = inspection['id'].toString(); // Get inspection ID
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Card(
+              elevation: 4, // Add elevation for a shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12), // Rounded corners
+              ),
+              child: InkWell(
+                onTap: () {
+                  // Navigate to inspection details page when card is tapped
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InspectionDetailsPage(inspectionId: inspectionId),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 120,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.blue, // Background color
+                  ),
+                  child: Center(
+                    child: Text(
+                      inspectionName,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 20),
-                Container(
-                  width: 200,
-                  height: 150,
-                  color: Colors.green,
-                  child: const Center(child: Text('Box 2')),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: 200,
-                  height: 150,
-                  color: Colors.orange,
-                  child: const Center(child: Text('Box 3')),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -117,8 +167,8 @@ class InspectionsPageState extends State<InspectionsPage> {
             MaterialPageRoute(builder: (context) => CreateInspectionPage()),
           );
         },
-        label: Text('Novo Projeto'),
-        icon: Icon(Icons.add),
+        label: const Text('Novo Projeto'),
+        icon: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../login.dart';
+
+// Access the User class
+User user = User.userInstance;
+String userEmail = user.email;
+String userId = user.id;
 
 class CreateInspectionPage extends StatefulWidget {
   @override
@@ -9,6 +15,7 @@ class CreateInspectionPage extends StatefulWidget {
 
 class _CreateInspectionPageState extends State<CreateInspectionPage> {
   final _formKey = GlobalKey<FormState>();
+
 
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
@@ -118,7 +125,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
           'freguesia_nome': _selectFreguesia,
           'rua': rua,
           'codigo_postal': codigo_postal,
-          "id_utilizador": 1
+          "id_utilizador": userId
         }),
       );
 
