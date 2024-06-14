@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:projeto_final_flutter/login.dart';
+import 'drones.dart';
+import 'recommendations.dart';
 import 'inspection/create-inspection.dart';
 import 'inspection/details-inspection.dart';
+import 'package:projeto_final_flutter/login.dart';
 
 class InspectionsPage extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class InspectionsPageState extends State<InspectionsPage> {
   // Access the User class
   User user = User.userInstance;
   List<dynamic> inspections = []; // List to store inspection data
+  int _selectedIndex = 0; // Index for the selected tab
 
   @override
   void initState() {
@@ -39,13 +42,34 @@ class InspectionsPageState extends State<InspectionsPage> {
     }
   }
 
+  // Function to handle tab selection
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String userEmail = user.email;
 
+    // List of pages corresponding to each tab
+    List<Widget> _pages = [
+      buildInspectionsList(),
+      DronesPage(),
+      RecommendationsPage(),
+    ];
+
+    // List of titles for each tab
+    List<String> _titles = [
+      'As minhas Inspeções',
+      'Drones',
+      'Recomendações',
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('As minhas Inspeções'),
+        title: Text(_titles[_selectedIndex]),
       ),
       drawer: Drawer(
         child: ListView(
@@ -115,52 +139,28 @@ class InspectionsPageState extends State<InspectionsPage> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: inspections.length,
-        itemBuilder: (BuildContext context, int index) {
-          dynamic inspection = inspections[index];
-          String inspectionName = inspection['tipo']['nome'];
-          String inspectionId = inspection['id'].toString(); // Get inspection ID
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Card(
-              elevation: 4, // Add elevation for a shadow effect
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12), // Rounded corners
-              ),
-              child: InkWell(
-                onTap: () {
-                  // Navigate to inspection details page when card is tapped
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => InspectionDetailsPage(inspectionId: inspectionId),
-                    ),
-                  );
-                },
-                child: Container(
-                  height: 120,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.blue, // Background color
-                  ),
-                  child: Center(
-                    child: Text(
-                      inspectionName,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+      body: _pages.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Projetos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.airplanemode_active),
+            label: 'Drones',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.recommend),
+            label: 'Recomendações',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
@@ -169,8 +169,58 @@ class InspectionsPageState extends State<InspectionsPage> {
         },
         label: const Text('Novo Projeto'),
         icon: const Icon(Icons.add),
-      ),
+      )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  // Widget to build the list of inspections
+  Widget buildInspectionsList() {
+    return ListView.builder(
+      itemCount: inspections.length,
+      itemBuilder: (BuildContext context, int index) {
+        dynamic inspection = inspections[index];
+        String inspectionName = inspection['tipo']['nome'];
+        String inspectionId = inspection['id'].toString(); // Get inspection ID
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Card(
+            elevation: 4, // Add elevation for a shadow effect
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12), // Rounded corners
+            ),
+            child: InkWell(
+              onTap: () {
+                // Navigate to inspection details page when card is tapped
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InspectionDetailsPage(inspectionId: inspectionId),
+                  ),
+                );
+              },
+              child: Container(
+                height: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.blue, // Background color
+                ),
+                child: Center(
+                  child: Text(
+                    inspectionName,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
