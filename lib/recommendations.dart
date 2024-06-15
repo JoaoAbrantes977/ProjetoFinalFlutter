@@ -26,13 +26,18 @@ class _RecommendationsPageState extends State<RecommendationsPage> with SingleTi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Regulamentação'),
-            Tab(text: 'Metereologia'),
-            Tab(text: 'Drones'),
-          ],
+        backgroundColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48.0),
+          child: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Regulamentação'),
+              Tab(text: 'Meteorologia'),
+              Tab(text: 'Drones'),
+            ],
+            indicatorColor: Colors.purple,
+          ),
         ),
       ),
       body: TabBarView(
@@ -50,10 +55,52 @@ class _RecommendationsPageState extends State<RecommendationsPage> with SingleTi
 class RegulamentacaoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Regulamentação Page Content',
-        style: TextStyle(fontSize: 24),
+    return const Scaffold(
+
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Text(
+          '''
+Principais aspectos regulamentares para inspeções com drones
+
+Regulamento n° 1093/2016 - Condições de operação aplicáveis e utilização do espaço aéreo pelos sistemas de aeronaves civis pilotadas remotamente (“Drones”)
+- Os voos devem apenas:
+  - Os operadores não podem exercer funções caso se encontrem em qualquer situação de incapacidade da sua aptidão física ou mental
+  - O operador deve sempre verificar que se encontra em segurança e sem interferências condições
+  - Não pode ser pilotagem uss aeronaves ao mesmo
+
+Decreto-Lei n° 58/2018
+- Carência de registo perante a ANAC dos os operadores de aparelhos de voo remotamente controlados com massa máxima operacional superior a 25 kg
+  - Caso o aparelho tenha massa máxima operacional superior a 0.9 kg, o operador necessita de um seguro de responsabilidade civil
+
+Voo sujeito à autorização da ANAC
+- Não carecem de registo perante a ANAC os operadores de aparelhos de voo remotamente controlados com massa máxima operacional inferior a 1 kg desde que:
+  - A altura do voo seja inferior a 5 metros acima da superfície
+  - O voo seja efetuado no interior do FMV
+  - O voo não seja efetuado com fins lucrativos nem no controle remoto
+  - O voo se efetue com distanciamento seguro de bens e pessoas
+  - A aeronave não esteja dotada de meio de propulsão não tripulado
+  - As aeronaves dispõem de um peso inferior a 25 kg
+  - O voo seja feito com a massa máxima operacional superior a 25 kg
+
+Voo sujeito à autorização da ICNF
+- Caso de voos sobre áreas protegidas e reservas naturais
+- Realização de voos sobre áreas protegidas / reservas naturais na região autónoma da Madeira
+- Realização de voos sobre áreas protegidas / reservas naturais na região autónoma dos Açores
+
+Para inspeção de construções
+- Inspeções dos pontos de intervenção devem ter a devida autorização por parte da entidade detentora do patrimônio a inspecionar
+
+Links Úteis
+- Regulamento para Operação de RPAS/Drones no Espaço Aéreo Civil Português: https://www.voanaboa.pt/formularios
+- Download do formulário de drones ICNF: https://www.voanaboa.pt/Files/downloads/Formulario_utilizacao_drones_ICNF.pdf
+- Global Drone Regulations Database: https://droneregulations.info/index.html
+
+Contato
+ANAC: +351 212 842 226 / Email: drones@anac.pt
+          ''',
+          style: TextStyle(fontSize: 16),
+        ),
       ),
     );
   }
@@ -67,10 +114,11 @@ class CondicoesMeteorologicasPage extends StatefulWidget {
 class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPage> {
   final TextEditingController _controller = TextEditingController();
   String _weatherInfo = '';
+  String _weatherIcon = '';
   bool _isLoading = false;
 
   Future<void> _fetchWeather(String city) async {
-    final apiKey = 'your_api_key_here'; // Replace with your OpenWeatherMap API key
+    final apiKey = '360e7d2f369f0ef961e098ea03f5f790'; // Replace with your OpenWeatherMap API key
     final url = 'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=pt';
 
     setState(() {
@@ -82,7 +130,11 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
       final data = json.decode(response.body);
       setState(() {
         _weatherInfo = 'Temperatura: ${data['main']['temp']}°C\n'
-            'Condição: ${data['weather'][0]['description']}';
+            'Condição: ${data['weather'][0]['description']}\n'
+            'Velocidade do Vento: ${data['wind']['speed']} m/s\n'
+            'Visibilidade: ${data['visibility'] / 1000} km\n'
+            'Probabilidade de Precipitação: ${data['clouds']['all']}%';
+        _weatherIcon = 'http://openweathermap.org/img/wn/${data['weather'][0]['icon']}@2x.png';
         _isLoading = false;
       });
     } else {
@@ -116,9 +168,15 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
           const SizedBox(height: 20),
           _isLoading
               ? const CircularProgressIndicator()
-              : Text(
-            _weatherInfo,
-            style: const TextStyle(fontSize: 18),
+              : Column(
+            children: [
+              if (_weatherIcon.isNotEmpty)
+                Image.network(_weatherIcon),
+              Text(
+                _weatherInfo,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ],
           ),
         ],
       ),
