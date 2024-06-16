@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../login.dart';
+import '../user/login.dart';
 
 // Access the User class
 User user = User.userInstance;

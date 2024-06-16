@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'drones.dart';
+import 'drone/drone.dart';
 import 'recommendations.dart';
 import 'inspection/create-inspection.dart';
 import 'inspection/details-inspection.dart';
-import 'package:projeto_final_flutter/login.dart';
+import 'package:projeto_final_flutter/user/login.dart';
 
 class InspectionsPage extends StatefulWidget {
   @override
@@ -62,7 +62,7 @@ class InspectionsPageState extends State<InspectionsPage> {
 
     // List of titles for each tab
     List<String> _titles = [
-      'As minhas Inspeções',
+      'Os meus Projetos',
       'Drones',
       'Recomendações',
     ];

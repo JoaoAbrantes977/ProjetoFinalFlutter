@@ -32,7 +32,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> with SingleTi
           child: TabBar(
             controller: _tabController,
             tabs: const [
-              Tab(text: 'Regulamentação'),
+              Tab(text: 'Regulamentos'),
               Tab(text: 'Meteorologia'),
               Tab(text: 'Drones'),
             ],
@@ -187,10 +187,32 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
 class TiposDeDronePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Tipos de Drone Page Content',
-        style: TextStyle(fontSize: 24),
+    return const Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Text(
+            'Principais aspetos a ter em conta para a seleção do aparelho\n\n'
+                'Tipo de sistema de voo\n'
+                '- Para inspeções da envolvente de construções aconselha-se o uso de aparelhos multirotor\n'
+                '- Para inspeção de estradas com grande extensão, aconselha-se o uso de aparelhos de asa fixa ou híbridos\n\n'
+                'Alcance\n'
+                '- O alcance máximo do aparelho deve ser superior a, pelo menos, metade da distância máxima entre o operador e o aparelho a quando da inspeção\n\n'
+                'Sensores\n'
+                '- Para inspeções onde seja necessário aproximar o aparelho à envolvente da construção, aconselha-se que o mesmo esteja equipado, no mínimo, com sensores frontais e laterais, por forma a evitar colisões\n'
+                '- Para inspeções em zonas com obstáculos acima do aparelho (ex: zona inferior do tabuleiro de uma ponte), aconselha-se que o mesmo esteja equipado com sensores verticais superiores por forma a evitar colisões\n\n'
+                'Câmera\n'
+                '- Para inspeções nas quais seja necessário observar zonas acima do aparelho, aconselha-se o uso de câmeras acopladas (Gimbal) com ângulo de rotação que permita a visualização desses locais\n'
+                '- A resolução das fotos deve ser suficiente para poder detectar anomalias de pequena dimensão (ex: fissuras), sendo recomendada uma resolução superior a 12 Megapixels\n'
+                '- Aconselha-se uma resolução de vídeo de pelo menos 1080p por forma a obter detalhe suficiente para detectar anomalias de pequena dimensão\n\n'
+                'Velocidade máxima de vento suportada\n'
+                '- Caso a velocidade do vento registada no local a quando do levantamento for superior à velocidade máxima suportada pelo drone, o voo deve ser interrompido até que a velocidade do vento permita o voo em segurança\n\n'
+                'Sistema de localização\n'
+                '- Para inspeções correntes (boas condições atmosféricas e bom sinal de GPS), recomenda-se o uso de drones equipados com, pelo menos, sistema de GPS/ GLONASS\n'
+                '- Para inspeções com condições atmosféricas adversas e sinal de GPS fraco, recomenda-se o uso de sistemas de localização RTK\n',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
       ),
     );
   }

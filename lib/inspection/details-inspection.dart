@@ -13,6 +13,7 @@ class InspectionDetailsPage extends StatefulWidget {
 
 class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
   Map<String, dynamic>? inspectionDetails; // To store inspection details
+  int _currentIndex = 0; // To keep track of the selected tab
 
   @override
   void initState() {
@@ -36,16 +37,11 @@ class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inspection Details'),
-      ),
-      body: inspectionDetails == null
-          ? const Center(
-        child: CircularProgressIndicator(),
-      )
+  // Function to build the content based on the selected tab
+  Widget _buildContent() {
+    if (_currentIndex == 0) {
+      return inspectionDetails == null
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -75,10 +71,14 @@ class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
             _buildDetailCard('Material de Revestimento:', inspectionDetails!['tipo']['material_revestimento']),
           ],
         ),
-      ),
-    );
+      );
+    } else {
+      // Placeholder for the "Inspections" tab
+      return const Center(child: Text('Inspections content goes here'));
+    }
   }
 
+  // Function to build a detail card
   Widget _buildDetailCard(String title, String value) {
     return Card(
       elevation: 2,
@@ -106,6 +106,34 @@ class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Inspection Details'),
+      ),
+      body: _buildContent(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.details),
+            label: 'Details',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Inspections',
+          ),
+        ],
       ),
     );
   }
