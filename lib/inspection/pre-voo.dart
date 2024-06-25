@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'pos-voo.dart'; // Import your PosVooPage file here
+import 'voo.dart'; // Import your PosVooPage file here
 
 class PreVooPage extends StatefulWidget {
   final int flightPlanId; // Receive flightPlanId from PlanoDeVooPage
@@ -89,7 +89,7 @@ class _PreVooPageState extends State<PreVooPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PosVooPage(
+        builder: (context) => VooPage(
           flightPlanId: widget.flightPlanId,
         ),
       ),

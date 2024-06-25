@@ -1,63 +1,34 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
-class PosVooPage extends StatefulWidget {
+class PosVooPage extends StatelessWidget {
+  final DateTime startTime;
+  final DateTime endTime;
+  final Duration inspectionDuration;
   final int flightPlanId;
 
-  PosVooPage({required this.flightPlanId});
-
-  @override
-  _PosVooPageState createState() => _PosVooPageState();
-}
-
-class _PosVooPageState extends State<PosVooPage> {
-  String imagePath =
-      '/data/user/0/com.example.projeto_final_flutter/cache/13ff016c-140d-4634-830f-6c9d53939e43/1000000035.png';
-
-  bool isInspectionStarted = false;
-  DateTime? startTime;
-  DateTime? endTime;
+  PosVooPage({
+    required this.startTime,
+    required this.endTime,
+    required this.inspectionDuration,
+    required this.flightPlanId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pós Voo'),
+        title: const Text('Pós Voo'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Image.file(
-              File(imagePath),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.4,
-              fit: BoxFit.contain,
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                if (!isInspectionStarted) {
-                  // Start inspection
-                  startTime = DateTime.now();
-                  isInspectionStarted = true;
-                } else {
-                  // End inspection
-                  endTime = DateTime.now();
-                  isInspectionStarted = false;
-                  // Calculate duration
-                  Duration inspectionDuration = endTime!.difference(startTime!);
-                  print('Inspection started at: ${startTime!.toLocal()}');
-                  print('Inspection finished at: ${endTime!.toLocal()}');
-                  print('Inspection duration: ${_formatDuration(inspectionDuration)}');
-                }
-              });
-            },
-            child: Text(isInspectionStarted ? 'Terminar Inspeção' : 'Iniciar Inspeção'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Start Time: ${startTime.toLocal()}'),
+            Text('End Time: ${endTime.toLocal()}'),
+            Text('Inspection Duration: ${_formatDuration(inspectionDuration)}'),
+            Text('Flight Plan ID: $flightPlanId'),
+          ],
+        ),
       ),
     );
   }
