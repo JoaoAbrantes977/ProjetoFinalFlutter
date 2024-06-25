@@ -118,7 +118,7 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
   bool _isLoading = false;
 
   Future<void> _fetchWeather(String city) async {
-    final apiKey = '360e7d2f369f0ef961e098ea03f5f790'; // Replace with your OpenWeatherMap API key
+    final apiKey = '360e7d2f369f0ef961e098ea03f5f790'; // chave da api OpenWeather
     final url = 'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&units=metric&lang=pt';
 
     setState(() {

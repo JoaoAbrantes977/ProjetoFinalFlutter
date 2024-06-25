@@ -51,7 +51,7 @@ class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildDetailCard(
-                      'Nome da Inspeção:', inspectionDetails!['tipo']['nome']),
+                      'Nome do Projeto:', inspectionDetails!['tipo']['nome']),
                   _buildDetailCard(
                       'Descrição:', inspectionDetails!['tipo']['descricao']),
                   _buildDetailCard(
