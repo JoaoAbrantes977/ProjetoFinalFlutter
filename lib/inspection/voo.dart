@@ -23,7 +23,7 @@ class _VooPageState extends State<VooPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Voo de Inspeção'),
+        title: const Text('Voo de Inspeção'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -36,7 +36,7 @@ class _VooPageState extends State<VooPage> {
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               setState(() {

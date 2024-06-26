@@ -179,3 +179,7 @@ class _InspectionDetailsPageState extends State<InspectionDetailsPage> {
     );
   }
 }
+// para um determinado utilizador quero saber o numero de inspeçoes esse numero
+// depois por cada um cria um retangulo, dentro do retangulo tenho uma top bar com o
+// plano_voo, pos_voo e process_voo, onde o id da inspeçao esta nesse plano_de voo e depois
+// os restantes inner joins com as outras tabelas
