@@ -27,7 +27,7 @@ class InspectionsPageState extends State<InspectionsPage> {
   // Function to fetch inspections
   Future<void> fetchInspections() async {
     String userId = user.id;
-    String url = 'http://10.0.2.2:3000/inspection/all/$userId'; // Replace with your API endpoint
+    String url = 'http://10.0.2.2:3000/inspection/all/$userId';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -46,8 +46,13 @@ class InspectionsPageState extends State<InspectionsPage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      if (_selectedIndex == 0) {
+        // If "Projetos" tab is selected, fetch inspections
+        fetchInspections();
+      }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

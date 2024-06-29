@@ -3,23 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ProcessInfoPage(afterFlightId: 1), // Replace with your afterFlightId
-    );
-  }
-}
+import '../projects.dart';
 
 class ProcessInfoPage extends StatefulWidget {
   final int afterFlightId;
@@ -219,18 +203,39 @@ class _AddAnomalyTabState extends State<AddAnomalyTab> {
             ),
             SizedBox(height: 40),
             Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  _submitForm(widget.afterFlightId);
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _submitForm(widget.afterFlightId);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    child: const Text('Submeter'),
                   ),
-                  textStyle: const TextStyle(fontSize: 18),
-                ),
-                child: const Text('Submeter'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => InspectionsPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      textStyle: const TextStyle(fontSize: 18),
+                    ),
+                    child: const Text('Terminar'),
+                  ),
+                ],
               ),
             ),
           ],

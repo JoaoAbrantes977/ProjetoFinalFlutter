@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../user/login.dart';
+import '../user/login.dart'; // Adjust the import path as necessary
 
 // Access the User class
 User user = User.userInstance;
@@ -16,7 +16,6 @@ class CreateInspectionPage extends StatefulWidget {
 class _CreateInspectionPageState extends State<CreateInspectionPage> {
   final _formKey = GlobalKey<FormState>();
 
-
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _descricaoController = TextEditingController();
   final TextEditingController _tipologiaController = TextEditingController();
@@ -26,17 +25,23 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
   final TextEditingController _periodoController = TextEditingController();
   final TextEditingController _utilizacaoController = TextEditingController();
   final TextEditingController _numFachadasController = TextEditingController();
-  final TextEditingController _numCoberturasController = TextEditingController();
+  final TextEditingController _numCoberturasController =
+      TextEditingController();
   final TextEditingController _kmInicioController = TextEditingController();
   final TextEditingController _kmFimController = TextEditingController();
-  final TextEditingController _materialEstruturalController = TextEditingController();
-  final TextEditingController _extensaoTabuleiroController = TextEditingController();
-  final TextEditingController _larguraTabuleiroController = TextEditingController();
-  final TextEditingController _viasCirculacaoController = TextEditingController();
+  final TextEditingController _materialEstruturalController =
+      TextEditingController();
+  final TextEditingController _extensaoTabuleiroController =
+      TextEditingController();
+  final TextEditingController _larguraTabuleiroController =
+      TextEditingController();
+  final TextEditingController _viasCirculacaoController =
+      TextEditingController();
   final TextEditingController _materialPaviController = TextEditingController();
   final TextEditingController _numPilaresController = TextEditingController();
   final TextEditingController _geometriaController = TextEditingController();
-  final TextEditingController _materialRevestimentoController = TextEditingController();
+  final TextEditingController _materialRevestimentoController =
+      TextEditingController();
   final TextEditingController _distritoController = TextEditingController();
   final TextEditingController _municipioController = TextEditingController();
   final TextEditingController _freguesiaController = TextEditingController();
@@ -78,8 +83,10 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
       final km_inicio = int.tryParse(_kmInicioController.text) ?? 0;
       final km_fim = int.tryParse(_kmFimController.text) ?? 0;
       final material_estrutural = _materialEstruturalController.text;
-      final extensao_tabuleiro = int.tryParse(_extensaoTabuleiroController.text) ?? 0;
-      final largura_tabuleiro = int.tryParse(_larguraTabuleiroController.text) ?? 0;
+      final extensao_tabuleiro =
+          int.tryParse(_extensaoTabuleiroController.text) ?? 0;
+      final largura_tabuleiro =
+          int.tryParse(_larguraTabuleiroController.text) ?? 0;
       final vias_circulacao = int.tryParse(_viasCirculacaoController.text) ?? 0;
       final material_pavimentacao = _materialPaviController.text;
       final num_pilares = int.tryParse(_numPilaresController.text) ?? 0;
@@ -136,7 +143,8 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
             backgroundColor: Colors.green,
           ),
         );
-        print('Registration successful');
+        // Navigate back to the previous screen
+        Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -226,16 +234,17 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _areaController,
                     decoration: InputDecoration(
-                      labelText: 'Área',
-                      hintText: 'Em m^2',
+                      labelText: 'Área (m²)',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
                       }
+                      // Additional validation logic can be added here
                       return null;
                     },
                   ),
@@ -243,16 +252,17 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _alturaController,
                     decoration: InputDecoration(
-                      labelText: 'Altura',
-                      hintText: 'Em metros',
+                      labelText: 'Altura (m)',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
                       }
+                      // Additional validation logic can be added here
                       return null;
                     },
                   ),
@@ -260,8 +270,8 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _dataUtilController,
                     decoration: InputDecoration(
-                      labelText: 'Data Útil',
-                      hintText: "No formato YYYY-MM-DD",
+                      labelText: 'Data de Utilização',
+                      hintText: 'YYYY-MM-DD',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -270,6 +280,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
                       }
+                      // You can add date validation logic here if needed
                       return null;
                     },
                   ),
@@ -277,16 +288,17 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _periodoController,
                     decoration: InputDecoration(
-                      labelText: 'Périodo de Uso',
-                      hintText: 'Numero de anos',
+                      labelText: 'Período de Construção',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
                       }
+                      // Additional validation logic can be added here
                       return null;
                     },
                   ),
@@ -294,8 +306,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _utilizacaoController,
                     decoration: InputDecoration(
-                      labelText: 'Utilização',
-                      hintText: 'Qual é a sua utilização',
+                      labelText: 'Utilização Prevista',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -310,22 +321,32 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _funcionamentoValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _funcionamentoValue = newValue!;
+                      });
+                    },
+                    items: _funcinamento
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
                       labelText: 'Funcionamento',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    items: _funcinamento.map((String specialty) {
-                      return DropdownMenuItem<String>(
-                        value: specialty,
-                        child: Text(specialty),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _funcionamentoValue = newValue!;
-                      });
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
@@ -337,6 +358,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -353,6 +375,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -363,33 +386,44 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _preEsforcoValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _preEsforcoValue = newValue!;
+                      });
+                    },
+                    items:
+                        _esforco.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
                       labelText: 'Pré-Esforço',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    items: _esforco.map((String specialty) {
-                      return DropdownMenuItem<String>(
-                        value: specialty,
-                        child: Text(specialty),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _preEsforcoValue = newValue!;
-                      });
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _kmInicioController,
                     decoration: InputDecoration(
-                      labelText: 'Km Inicio',
+                      labelText: 'Km Início',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -406,6 +440,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -433,12 +468,12 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _extensaoTabuleiroController,
                     decoration: InputDecoration(
-                      labelText: 'Extensão Tabuleiro',
-                      hintText: 'Em metros',
+                      labelText: 'Extensão do Tabuleiro',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -450,12 +485,12 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _larguraTabuleiroController,
                     decoration: InputDecoration(
-                      labelText: 'Largura Tabuleiro',
-                      hintText: 'Em metros',
+                      labelText: 'Largura do Tabuleiro',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -467,11 +502,12 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _viasCirculacaoController,
                     decoration: InputDecoration(
-                      labelText: 'Vias Circulação',
+                      labelText: 'Vias de Circulação',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -483,7 +519,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _materialPaviController,
                     decoration: InputDecoration(
-                      labelText: 'Material Pavimentação',
+                      labelText: 'Material de Pavimentação',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -504,6 +540,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -520,6 +557,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Campo Obrigatório';
@@ -531,7 +569,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   TextFormField(
                     controller: _materialRevestimentoController,
                     decoration: InputDecoration(
-                      labelText: 'Material Revestimento',
+                      labelText: 'Material de Revestimento',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -546,120 +584,147 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _sistemaDrenagemValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _sistemaDrenagemValue = newValue!;
+                      });
+                    },
+                    items:
+                        _drenagem.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
                       labelText: 'Sistema de Drenagem',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    items: _drenagem.map((String specialty) {
-                      return DropdownMenuItem<String>(
-                        value: specialty,
-                        child: Text(specialty),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _sistemaDrenagemValue = newValue!;
-                      });
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectedCountry,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedCountry = newValue!;
+                      });
+                    },
+                    items: _countries
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
                       labelText: 'País',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    items: _countries.map((String country) {
-                      return DropdownMenuItem<String>(
-                        value: country,
-                        child: Text(country),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedCountry = newValue!;
-                      });
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectDistrito,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectDistrito = newValue!;
+                      });
+                    },
+                    items:
+                        _distrito.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
                       labelText: 'Distrito',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    items: _distrito.map((String distrito) {
-                      return DropdownMenuItem<String>(
-                        value: distrito,
-                        child: Text(distrito),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectDistrito = newValue!;
-                      });
-                      // Update the selected district in the controller
-                      _distritoController.text = newValue!;
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectMunicipio,
-                    decoration: InputDecoration(
-                      labelText: 'Municipio',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    items: _municipio.map((String municipio) {
-                      return DropdownMenuItem<String>(
-                        value: municipio,
-                        child: Text(municipio),
-                      );
-                    }).toList(),
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectMunicipio = newValue!;
                       });
-                      // Update the selected municipality in the controller
-                      _municipioController.text = newValue!;
+                    },
+                    items: _municipio
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      labelText: 'Município',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
                     value: _selectFreguesia,
-                    decoration: InputDecoration(
-                      labelText: 'Freguesia',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    items: _freguesia.map((String freguesia) {
-                      return DropdownMenuItem<String>(
-                        value: freguesia,
-                        child: Text(freguesia),
-                      );
-                    }).toList(),
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectFreguesia = newValue!;
                       });
-                      // Update the selected parish in the controller
-                      _freguesiaController.text = newValue!;
                     },
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _ruaController,
+                    items: _freguesia
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                     decoration: InputDecoration(
-                      labelText: 'Rua',
-                      prefixIcon: const Icon(Icons.location_city),
+                      labelText: 'Freguesia',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -676,7 +741,22 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                     controller: _codigoController,
                     decoration: InputDecoration(
                       labelText: 'Código Postal',
-                      prefixIcon: const Icon(Icons.markunread_mailbox),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo Obrigatório';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _ruaController,
+                    decoration: InputDecoration(
+                      labelText: 'Rua',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -691,7 +771,7 @@ class _CreateInspectionPageState extends State<CreateInspectionPage> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: _register,
-                    child: const Text('Criar'),
+                    child: const Text('Criar Inspeção'),
                   ),
                 ],
               ),
