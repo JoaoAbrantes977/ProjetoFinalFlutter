@@ -4,6 +4,8 @@ import 'dart:convert';
 import '../projects.dart';
 import 'register.dart';
 
+// class user to save user details
+
 class User {
   late String _id;
   late String _email;
@@ -40,15 +42,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+ // to identify the form on the different parts of the widget tree
   final _formKey = GlobalKey<FormState>();
+  // input controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  // function login
   Future<void> _login() async {
     if (_validateInputs()) {
       final email = _emailController.text;
       final password = _passwordController.text;
 
+      // http post for login
       final url = Uri.parse('http://10.0.2.2:3000/user/login');
       try {
         final response = await http.post(
@@ -64,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
 
         if (response.statusCode == 200) {
           final responseBody = json.decode(response.body);
+          // jwt token
           final token = responseBody['token'];
           final userId = responseBody['userId'].toString();
 
@@ -72,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("User Signed In Successfully"),
+              content: Text(" Signed In com sucesso"),
               backgroundColor: Colors.green,
             ),
           );
@@ -80,22 +88,21 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(builder: (context) => InspectionsPage()),
           );
-          print('Login successful: $token');
+          print('login com sucesso: $token');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("Wrong Email or Password"),
+              content: Text("Email ou Password Incorretos"),
               backgroundColor: Colors.red,
             ),
           );
-          print('Login failed: ${response.body}');
+          print('login falhado: ${response.body}');
         }
       } catch (e) {
-        // Handle network errors, server errors, etc.
-        print('Error logging in: $e');
+        print('Error no login: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Error logging in"),
+            content: Text("Error no login"),
             backgroundColor: Colors.red,
           ),
         );
@@ -124,26 +131,26 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                    'Welcome Back',
+                    'Drone Inspection App',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
-                    'Login to your account',
+                    'Faça login na sua conta',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.grey[700],
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -151,20 +158,20 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return 'Introduza o seu email';
                       }
                       if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return 'Please enter a valid email';
+                        return 'Introduza um email valido';
                       }
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -172,20 +179,19 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Introduza uma password valida';
                       }
                       return null;
                     },
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // Add forgot password logic
-                        print('Forgot Password');
+                        print('Recuperar password');
                       },
-                      child: const Text('I forgot password'),
+                      child: const Text('Esqueci-me da password'),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -203,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? "),
+                      const Text("Não tem conta? "),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -211,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                             MaterialPageRoute(builder: (context) => RegisterPage()),
                           );
                         },
-                        child: const Text('Sign Up'),
+                        child: const Text('Fazer Registo'),
                       ),
                     ],
                   ),

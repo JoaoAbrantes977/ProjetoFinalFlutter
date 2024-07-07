@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+// Class Recommendations Page
+
 class RecommendationsPage extends StatefulWidget {
   @override
   _RecommendationsPageState createState() => _RecommendationsPageState();
@@ -22,6 +24,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> with SingleTi
     super.dispose();
   }
 
+  // tabview widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +55,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> with SingleTi
   }
 }
 
+// Regulamentacao tab
 class RegulamentacaoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -106,6 +110,7 @@ ANAC: +351 212 842 226 / Email: drones@anac.pt
   }
 }
 
+// Condicoes Meteorologicas tab
 class CondicoesMeteorologicasPage extends StatefulWidget {
   @override
   _CondicoesMeteorologicasPageState createState() => _CondicoesMeteorologicasPageState();
@@ -145,6 +150,7 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
     }
   }
 
+  // widget metereologia
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -184,6 +190,7 @@ class _CondicoesMeteorologicasPageState extends State<CondicoesMeteorologicasPag
   }
 }
 
+// drones tab
 class TiposDeDronePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

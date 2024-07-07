@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'pos-voo.dart';
 
+// class
 class VooPage extends StatefulWidget {
   final int flightPlanId;
 
@@ -12,12 +15,32 @@ class VooPage extends StatefulWidget {
 }
 
 class _VooPageState extends State<VooPage> {
-  String imagePath =
-      '/data/user/0/com.example.projeto_final_flutter/cache/13ff016c-140d-4634-830f-6c9d53939e43/1000000035.png';
-
+  String imagePath = '';
   bool isInspectionStarted = false;
   DateTime? startTime;
   DateTime? endTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchImagePath();
+  }
+  Future<void> _fetchImagePath() async {
+    final url = 'http://10.0.2.2:3000/flightPlan/${widget.flightPlanId}';
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final flightPlan = jsonDecode(response.body);
+        setState(() {
+          imagePath = flightPlan['linha_voo'];
+        });
+      } else {
+        throw Exception('Failed to load flight plan');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +48,9 @@ class _VooPageState extends State<VooPage> {
       appBar: AppBar(
         title: const Text('Voo de Inspeção'),
       ),
-      body: Column(
+      body: imagePath.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
@@ -88,4 +113,3 @@ class _VooPageState extends State<VooPage> {
     return "${duration.inHours}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }
-

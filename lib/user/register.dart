@@ -10,12 +10,14 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  // values that appear has a placeholder
   String _selectedCountry = 'Portugal';
   String _selectedSpecialty = 'Operador';
   String _selectDistrito = "Castelo Branco";
   String _selectMunicipio = "Covilhã";
   String _selectFreguesia = "Covilhã";
 
+  // input controllers
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -26,13 +28,14 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _municipioController = TextEditingController();
   final TextEditingController _freguesiaController = TextEditingController();
 
+  // values for dropdown
   final List<String> _countries = ['Portugal', 'Spain', 'France', 'UK', 'USA'];
   final List<String> _specialties = ['Operador', 'Controlador', 'Inspetor'];
   final List<String> _distrito = ['Castelo Branco', 'Lisboa', 'Porto'];
   final List<String> _municipio = ['Covilhã', 'Fundão', 'Belmonte'];
   final List<String> _freguesia = ['Dominguiso', 'Covilhã', 'Boidobra'];
 
-  // FUNÇÃO DE REGISTO
+  // function registo
   Future<void> _register() async {
     if (_validateInputs()) {
       final name = _nameController.text;
@@ -74,7 +77,7 @@ class RegisterPageState extends State<RegisterPage> {
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
-        print('Registration successful');
+        print('registado com sucesso');
       } else if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -89,12 +92,11 @@ class RegisterPageState extends State<RegisterPage> {
             backgroundColor: Colors.red,
           ),
         );
-        print('Registration failed: ${response.body}');
+        print('falhou ao registar: ${response.body}');
       }
     }
   }
 
-  // VERIFICAR OS INPUTS
   // Validate Inputs
   bool _validateInputs() {
     return _formKey.currentState?.validate() ?? false;
@@ -298,7 +300,6 @@ class RegisterPageState extends State<RegisterPage> {
                       setState(() {
                         _selectFreguesia = newValue!;
                       });
-                      // Update the selected parish in the controller
                       _freguesiaController.text = newValue!;
                     },
                   ),

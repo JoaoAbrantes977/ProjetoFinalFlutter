@@ -56,7 +56,7 @@ class PosVooPage extends StatelessWidget {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildTextField(
                   controller: numVideosController,
                   labelText: 'Número de Vídeos',
@@ -67,11 +67,11 @@ class PosVooPage extends StatelessWidget {
                     return null;
                   },
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 _buildInfoText('Hora Início: ${startTime.toLocal()}'),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildInfoText('Hora Fim: ${endTime.toLocal()}'),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildInfoText('Tempo Total: ${_formatDuration(inspectionDuration)}'),
                 SizedBox(height: 40),
                 ElevatedButton(

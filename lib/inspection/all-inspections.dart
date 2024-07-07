@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:projeto_final_flutter/inspection/plano-voo.dart';
+import 'package:open_file/open_file.dart';
 
 class AllInspectionsPage extends StatefulWidget {
   final String inspectionId;
@@ -355,13 +356,73 @@ class _InfoPageState extends State<InfoPage> {
               itemCount: processInfoEntries.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> entry = processInfoEntries[index];
-                return _buildProcessInfoCards(entry);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (index == 0) _buildGenerateReportButton(), // Add the button before the first entry
+                    _buildProcessInfoCards(entry),
+                  ],
+                );
               },
             );
           }
         },
       ),
     );
+  }
+
+  Widget _buildGenerateReportButton() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: _generateReport,
+          child: const Text('Gerar Relatório'),
+        ),
+      ),
+    );
+  }
+
+  void _generateReport() async {
+    String url = 'http://10.0.2.2:3000/report/pos-inspecao/${widget.inspectionId}';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // Obter o diretório de downloads
+        final directory = await getExternalStorageDirectory();
+        String filePath = '${directory!.path}/report.pdf';
+
+        // Escrever o conteúdo do arquivo no diretório de downloads
+        File pdfFile = File(filePath);
+        await pdfFile.writeAsBytes(response.bodyBytes);
+
+        // Exibir um SnackBar indicando que o download foi concluído com sucesso
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Report download with sucess at ${directory.path}/report.pdf'),
+            duration: Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Abrir',
+              onPressed: () {
+                // Abrir o arquivo PDF com o visualizador padrão
+                OpenFile.open(filePath);
+              },
+            ),
+          ),
+        );
+      } else {
+        throw Exception('Falha ao baixar o relatório');
+      }
+    } catch (e) {
+      // Exibir um SnackBar indicando que ocorreu um erro durante o download
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erro ao baixar o relatório: $e'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+    }
   }
 
   Widget _buildProcessInfoCards(Map<String, dynamic> entry) {
@@ -392,9 +453,9 @@ class _InfoPageState extends State<InfoPage> {
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             if (title == 'Foto:')
               Image.file(
                 value != null ? File(value) : File(''), // Assuming value is a file path
@@ -413,3 +474,4 @@ class _InfoPageState extends State<InfoPage> {
     );
   }
 }
+

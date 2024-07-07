@@ -24,6 +24,7 @@ class _PlanoDeVooPageState extends State<PlanoDeVooPage> {
   String? taxaSobrepos;
   String? intervaloFoto;
   String? tipoVoo;
+  String? selectedDrone;
   File? linhaVooImage;
 
   final ImagePicker _picker = ImagePicker();
@@ -74,7 +75,7 @@ class _PlanoDeVooPageState extends State<PlanoDeVooPage> {
             'tipo_voo': tipoVoo!,
             'linha_voo': linhaVooValue,
             'id_inspecao': idInspecaoValue,
-            'id_drone': 1,
+            'id_drone': selectedDrone,
           }),
         );
         if (response.statusCode == 200) {
@@ -82,7 +83,7 @@ class _PlanoDeVooPageState extends State<PlanoDeVooPage> {
           Map<String, dynamic> responseData = json.decode(response.body);
           int newFlightPlanId = responseData['id'];
 
-          print('Form data submitted successfully with ID: $newFlightPlanId');
+          print('plano de voo ID: $newFlightPlanId');
 
           // Passa o id do recem criado plano de voo para a proxima page (pre-voo.dart)
           Navigator.push(
@@ -284,6 +285,53 @@ class _PlanoDeVooPageState extends State<PlanoDeVooPage> {
                       },
                       onSaved: (value) {
                         tipoVoo = value;
+                      },
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: 'Drone',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      value: selectedDrone,
+                      items: const [
+                        DropdownMenuItem<String>(
+                          value: 'Malvoc',
+                          child: Text('Malvoc'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'Alvata',
+                          child: Text('Alvata'),
+                        ),
+                      ],
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedDrone = newValue;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, selecione um drone';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        // Map dropdown value to corresponding ID
+                        if (value == 'Malvoc') {
+                          selectedDrone = "3";
+                        } else if (value == 'Alvata') {
+                          selectedDrone = "4";
+                        }
                       },
                     ),
                   ),

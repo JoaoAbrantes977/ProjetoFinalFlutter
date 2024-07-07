@@ -36,11 +36,11 @@ class _ProcessInfoPageState extends State<ProcessInfoPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
-            label: 'Add Anomaly',
+            label: 'Adicionar Anomalia',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Anomalies List',
+            label: 'Lista das Anomalias',
           ),
         ],
       ),
@@ -76,7 +76,7 @@ class _AddAnomalyTabState extends State<AddAnomalyTab> {
         _image = File(pickedFile.path);
         _imagePath = pickedFile.path;
       } else {
-        print('No image selected.');
+        print('Imagem não foi selecionada');
       }
     });
   }
@@ -108,7 +108,7 @@ class _AddAnomalyTabState extends State<AddAnomalyTab> {
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, show success Snackbar
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Anomalia inserida com sucesso'),
             backgroundColor: Colors.green,
           ),
@@ -291,7 +291,7 @@ class _AnomaliesListTabState extends State<AnomaliesListTab> {
         anomalies = jsonDecode(response.body);
       });
     } else {
-      print('Failed to fetch anomalies');
+      print('Erra ao obter anomalias');
     }
   }
 
@@ -302,7 +302,7 @@ class _AnomaliesListTabState extends State<AnomaliesListTab> {
       itemBuilder: (context, index) {
         final anomaly = anomalies[index];
         return ListTile(
-          title: Text('Anomaly ${index + 1}'),
+          title: Text('Anomalia ${index + 1}'),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
